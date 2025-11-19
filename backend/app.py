@@ -21,9 +21,10 @@ def home():
     try:
         conn = get_conn()
         conn.close()
-        return {"msg": "Conexión a PostgreSQL funcionando correctamente!"}
+        return {"msg": "Probando, 1, 2... Conexión a PostgreSQL funcionando correctamente!"}
     except Exception as e:
         return {"error": str(e)}
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+

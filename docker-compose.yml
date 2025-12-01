@@ -1,41 +1,74 @@
+# ARCHIVO DOCKER-COMPOSE
+# Estructura y define el funcionamiento de la plataforma web solicitada, redes s persistencia de datos incluidos. 
+# Hecho con: 
+# - phyton
+# - backend (Flask)
+# - adminer como gestor
+# - base de datos (PostgreSQL)
+
+
+# Versión del formato de docker
 version: '3.9'
 
 services:
 
   backend:
+    # Buildea la imagen del backend usando el ockerfile dentro de la carpeta backend
     build: ./backend
+
+    # Mapea el puerto 5000 del contenedor al 5000 del host para que se pueda acceder a él mediante el navegador web
     ports:
       - "5000:5000"
+
+    # Indica que el backend depende de la db y por ende debe esperar a que arranque primero
     depends_on:
       - db
+
+    # Variables de entorno para que el backend pueda conectarse a PostgreSQL, utilizando el archivo .env
     environment:
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+
+    # Conecta el contenedor a la red interna appnet
     networks:
       - appnet
 
   db:
+    # Usa la imagen oficial de PostgreSQL desde DockerHub
     image: postgres:15
+
+    # Configura usuario, contraseña y nombre de la db usando las variables configuradas en .env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+
+    # Monta un volumen para que los datos se guarden 
     volumes:
       - dbdata:/var/lib/postgresql/data
+
+    # Conecta la db a la misma red interna que el backend
     networks:
       - appnet
 
   adminer:
+    # Interfaz web para gestionar la db (PostgreSQL)
     image: adminer
+
+    # Configura el puerto 8080 para que se pueda abrir y utilizar Adminer
     ports:
       - "8080:8080"
+
+    # Conecta a la red interna para acceder a la db
     networks:
       - appnet
 
+# appnet, para permitir la comunicación entre backend, db y adminer
 networks:
   appnet:
 
+# 'dbdata' utiliza PostgreSQL para almacenar los datos de forma peristente y que no se pierdan
 volumes:
   dbdata:

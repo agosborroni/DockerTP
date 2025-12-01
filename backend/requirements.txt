@@ -1,3 +1,11 @@
+# REQUIREMENTS.txt
+# Lista de dependencias/librerías que el backend necesita instalar en la imagen de Docker 
+
+# Framework para crear la API del backend
 flask
+
+# Driver que le permite a Python conectarse con la base de datos de PostgreSQL, comunicándola con Flask
 psycopg2
+
+# Permite cargar variables de entorno desde el archivo .env
 python-dotenv

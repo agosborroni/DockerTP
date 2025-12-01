@@ -1,10 +1,20 @@
+# ARCHIVO DOCKER (DOCKERFILE)
+# Crea y configura la imagen de Docker 
+
+# Imagen oficial de Phyton, versión 3.10, de DockerHub
 FROM python:3.10
 
+# Configura /app como el directorio de instalación y trabajo dentro del contenedor
 WORKDIR /app
 
+# Copia el archivo de dependencias dentro /app
 COPY requirements.txt .
+
+# Se instalan dichas dependencias
 RUN pip install -r requirements.txt
 
+# También se instala el resto de los archivos 
 COPY . .
 
+# Ejecuta la aplicación al iniciar el contenedor 
 CMD ["python", "app.py"]
